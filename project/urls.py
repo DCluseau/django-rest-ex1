@@ -6,6 +6,7 @@ from rest_framework import routers
 from shop.views import CategoryViewSet
 # from shop.views import ProductView
 from shop.views import ProductViewSet
+from shop.views import ArticleViewSet
 
 # Création du router
 router = routers.SimpleRouter()
@@ -13,6 +14,7 @@ router = routers.SimpleRouter()
 # Création de l'adresse générique pour Category api/category
 router.register('category', CategoryViewSet, basename='category')
 router.register('product', ProductViewSet, basename='product')
+router.register('article', ArticleViewSet, basename='article')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
