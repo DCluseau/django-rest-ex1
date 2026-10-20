@@ -22,6 +22,18 @@ Attention, pour bien fonctionner, le projet doit être configuré avec les param
 - Django 3.2.5
 - Django Rest Framework 3.12.4
 
+Initialiser la base de données avec la commande suivante :
+
+```
+python manage.py migrate
+```
+
+Initialiser le projet pour l'environnement de développement local :
+
+```
+python manage.py init_local_dev
+```
+
 Pour lancer l'application, entrer la commande suivante dans le terminal de PyCharm :
 
 ```
