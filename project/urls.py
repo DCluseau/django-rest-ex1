@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 # from shop.views import CategoryView
-from shop.views import CategoryViewSet
+from shop.views import CategoryViewSet, AdminCategoryViewSet
 # from shop.views import ProductView
 from shop.views import ProductViewSet
 from shop.views import ArticleViewSet
@@ -15,6 +15,7 @@ router = routers.SimpleRouter()
 router.register('category', CategoryViewSet, basename='category')
 router.register('product', ProductViewSet, basename='product')
 router.register('article', ArticleViewSet, basename='article')
+router.register('admin/category', AdminCategoryViewSet, basename='admin-category')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

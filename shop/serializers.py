@@ -25,6 +25,12 @@ class CategoryListSerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'date_created', 'date_updated', 'name']
 
+    def validate_name(self, value):
+        # Vérification que la Category n'existe pas
+        if Category.objects.filter(name=value).exists():
+            raise serializers.ValidationError('Category already exists.')
+        return value
+
 class CategoryDetailSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
     # Serializer = objet qui permet de transformer les models Django en un autre format

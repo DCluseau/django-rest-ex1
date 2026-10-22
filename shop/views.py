@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework.decorators import action
 from rest_framework.views import APIView
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.response import Response
 
 from shop.models import Category, Article
@@ -95,3 +95,10 @@ class ArticleViewSet(ReadOnlyModelViewSet):
             queryset = queryset.filter(product_id=product_id)
         return queryset
 
+
+class AdminCategoryViewSet(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = CategoryListSerializer
+    detail_serializer_class = CategoryDetailSerializer
+    # queryset = Category.objects.all()
+    def get_queryset(self):
+        return Category.objects.all()
