@@ -3,22 +3,30 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
 from shop.models import Category, Article
-from shop.serializers import CategorySerializer, ArticleSerializer
+from shop.serializers import CategoryDetailSerializer, CategoryListSerializer, ArticleSerializer
 
 from shop.models import Product
 
 # Utiliser ReadOnlyViewSet pour empêcher de modifier les catégories
 class CategoryViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = CategorySerializer
+    serializer_class = CategoryListSerializer
+    # Attribut de classe pour définir un serializer de détails
+    detail_serializer_class = CategoryDetailSerializer
 
     # Modification de query_set pour filtrer uniquement les Product actifs
     def get_queryset(self):
         return Category.objects.filter(active=True)
 
+    def get_serializer_class(self):
+        # Si l'action est retrieve, alors retour du serializer de détail
+        if self.action == 'retrieve':
+            return self.detail_serializer_class
+        return super().get_serializer_class()
+
 class ProductViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = CategorySerializer
+    serializer_class = CategoryListSerializer
 
     def get_queryset(self):
         # Appliquer un filtre pour n'avoir que les Product actifs
