@@ -32,8 +32,10 @@ class Category(models.Model):
 
     @property
     def ecoscore(self):
+        # Nous réalisons l'appel à open food fact
         response = self.call_external_api('GET', 'https://world.openfoodfacts.org/api/v0/product/3229820787015.json')
         if response.status_code == 200:
+            # et ne renvoyons l'écoscore que si la réponse est valide
             return response.json()['product']['ecoscore_grade']
 
 
