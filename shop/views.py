@@ -5,7 +5,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.response import Response
 
 from shop.models import Category, Article
-from shop.serializers import CategoryDetailSerializer, CategoryListSerializer, ArticleSerializer
+from shop.serializers import CategoryDetailSerializer, CategoryListSerializer, ArticleSerializer, ProductListSerializer
 
 from shop.models import Product
 
@@ -102,3 +102,13 @@ class AdminCategoryViewSet(MultipleSerializerMixin, ModelViewSet):
     # queryset = Category.objects.all()
     def get_queryset(self):
         return Category.objects.all()
+
+class AdminArticleViewSet(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = ArticleSerializer
+    def get_queryset(self):
+        return Article.objects.all()
+
+class AdminProductViewSet(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = ProductListSerializer
+    def get_queryset(self):
+        return Product.objects.all()

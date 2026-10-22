@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 # from shop.views import CategoryView
-from shop.views import CategoryViewSet, AdminCategoryViewSet
+from shop.views import CategoryViewSet, AdminCategoryViewSet, AdminArticleViewSet, AdminProductViewSet
 # from shop.views import ProductView
 from shop.views import ProductViewSet
 from shop.views import ArticleViewSet
@@ -16,6 +16,8 @@ router.register('category', CategoryViewSet, basename='category')
 router.register('product', ProductViewSet, basename='product')
 router.register('article', ArticleViewSet, basename='article')
 router.register('admin/category', AdminCategoryViewSet, basename='admin-category')
+router.register('admin/product', AdminProductViewSet, basename='admin-product')
+router.register('admin/article', AdminArticleViewSet, basename='admin-article')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
