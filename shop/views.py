@@ -1,3 +1,5 @@
+from django.db import transaction
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
@@ -6,6 +8,21 @@ from shop.models import Category, Article
 from shop.serializers import CategoryDetailSerializer, CategoryListSerializer, ArticleSerializer
 
 from shop.models import Product
+
+class MultipleSerializerMixin:
+    # Un mixin est une classe qui ne fonctionne pas de façon autonome
+    # Elle permet d'ajouter des fonctionnalités aux classes qui les étendent
+
+    detail_serializer_class = None
+
+    def get_serializer_class(self):
+        # Notre mixin détermine quel serializer à utiliser
+        # même si elle ne sait pas ce que c'est ni comment l'utiliser
+        if self.action == 'retrieve' and self.detail_serializer_class is not None:
+            # Si l'action demandée est le détail alors nous retournons le serializer de détail
+            return self.detail_serializer_class
+        return super().get_serializer_class()
+
 
 # Utiliser ReadOnlyViewSet pour empêcher de modifier les catégories
 class CategoryViewSet(ReadOnlyModelViewSet):
@@ -24,6 +41,20 @@ class CategoryViewSet(ReadOnlyModelViewSet):
             return self.detail_serializer_class
         return super().get_serializer_class()
 
+    @action(detail=True, methods=['post'])
+    def disable(self, request, pk):
+        # Désactivation de la Category
+        self.get_object().disable()
+        category = self.get_object()
+        category.active = False
+        category.save()
+
+        # Désactivation des produits de la Category
+        category.products.update(active=False)
+
+        # Retour du status_code 200 pour indiquer le succès de l'action
+        return Response()
+
 class ProductViewSet(ReadOnlyModelViewSet):
 
     serializer_class = CategoryListSerializer
@@ -39,6 +70,20 @@ class ProductViewSet(ReadOnlyModelViewSet):
             queryset = queryset.filter(category_id=category_id)
         # Note : si la category_id n'est pas trouvée, l'application renvoie une liste vide au lieu d'une erreur
         return queryset
+
+    @action(detail=True, methods=['post'])
+    def disable(self, request, pk):
+        # Désactivation de la Category
+        self.get_object().disable()
+        product = self.get_object()
+        product.active = False
+        product.save()
+
+        # Désactivation des produits de le Product
+        product.articles.update(active=False)
+
+        # Retour du status_code 200 pour indiquer le succès de l'action
+        return Response()
 
 class ArticleViewSet(ReadOnlyModelViewSet):
     serializer_class = ArticleSerializer
