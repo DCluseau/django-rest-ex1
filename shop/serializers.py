@@ -24,7 +24,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'date_created', 'date_updated', 'name', 'category']
+        fields = ['id', 'date_created', 'date_updated', 'name', 'category', 'ecoscore']
 
 class ProductDetailSerializer(serializers.ModelSerializer):
 
@@ -32,7 +32,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'date_created', 'date_updated', 'name', 'category', 'articles']
+        fields = ['id', 'date_created', 'date_updated', 'name', 'category', 'articles', 'ecoscore']
 
     def get_articles(self, instance):
         queryset = instance.articles.filter(active=True)

@@ -1,3 +1,4 @@
+import requests
 from django.db import models, transaction
 
 
@@ -21,6 +22,19 @@ class Category(models.Model):
         self.active = False
         self.save()
         self.products.update(active=False)
+
+    def call_external_api(self, method, url):
+        # l'appel doit être le plus petit possible car appliquer un mock va réduire la couverture de tests
+        # C'est cette méthode qui va être monkey patchée
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}  # Resolve Error 403 - Access Denied
+
+        return requests.request(method, url, headers=headers)
+
+    @property
+    def ecoscore(self):
+        response = self.call_external_api('GET', 'https://world.openfoodfacts.org/api/v0/product/3229820787015.json')
+        if response.status_code == 200:
+            return response.json()['product']['ecoscore_grade']
 
 
 class Product(models.Model):
