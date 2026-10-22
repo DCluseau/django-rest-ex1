@@ -6,7 +6,7 @@ from shop.models import Category, Product, Article
 class ArticleSerializer(ModelSerializer):
     class Meta:
         model = Article
-        fields = ['id', 'date_created', 'date_updated', 'name', 'product_id']
+        fields = ['id', 'date_created', 'date_updated', 'name', 'price', 'product_id']
 
 # Endpoint pour les products
 class ProductSerializer(serializers.ModelSerializer):
@@ -20,7 +20,12 @@ class ProductSerializer(serializers.ModelSerializer):
         serializer = ArticleSerializer(queryset, many=True)
         return serializer.data
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'date_created', 'date_updated', 'name']
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
     # Serializer = objet qui permet de transformer les models Django en un autre format
     # Ici, le format est JSON
